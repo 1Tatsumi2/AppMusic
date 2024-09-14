@@ -45,6 +45,7 @@
         android:inputType="textEmailAddress"
         android:padding="15dp"
         android:textColorHint="#d0d1d4"
+        android:textColor="#d0d1d4"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -63,12 +64,13 @@
         android:inputType="textPassword"
         android:padding="15dp"
         android:textColorHint="#d0d1d4"
+        android:textColor="#d0d1d4"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextEmailAddress"
         app:layout_constraintStart_toStartOf="@+id/editTextTextEmailAddress"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/reset_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
@@ -87,7 +89,8 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="80dp"
-        android:backgroundTint="#CE5270"
+        app:backgroundTint="@null"
+        android:background="@drawable/gradient_background"
         android:fontFamily="casual"
         android:text="Sign In"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
@@ -97,14 +100,13 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="85dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button">
 
         <TextView
-            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
@@ -115,6 +117,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/dont_have_an_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
