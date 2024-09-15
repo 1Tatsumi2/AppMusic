@@ -6,6 +6,8 @@
     <color name="editText">#292E4B</color>
     <color name="startColor">#ED8770</color>
     <color name="endColor">#D9519B</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#00FF00</color>
 
 
 </resources>

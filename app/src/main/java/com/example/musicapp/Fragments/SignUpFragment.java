@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ public class SignUpFragment extends Fragment {
     private EditText password;
     private EditText confirmPass;
     private Button signUpButton;
+    private ProgressBar signUpProgress;
+
     private FirebaseAuth mAuth;
 
     @Override
@@ -47,9 +50,10 @@ public class SignUpFragment extends Fragment {
 
         userName = view.findViewById(R.id.userName);
         email = view.findViewById(R.id.emailID);
-        password = view.findViewById(R.id.Password);
+        password = view.findViewById(R.id.password);
         confirmPass = view.findViewById(R.id.confirmPass);
         signUpButton = view.findViewById(R.id.signUpButton);
+        signUpProgress = view.findViewById(R.id.signUpProgress);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         return view;
@@ -137,9 +141,9 @@ public class SignUpFragment extends Fragment {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUpWithFirebase();
                 signUpButton.setEnabled(false);
                 signUpButton.setTextColor(getResources().getColor(R.color.white));
+                signUpWithFirebase();
             }
         });
     }
@@ -147,19 +151,20 @@ public class SignUpFragment extends Fragment {
     private void signUpWithFirebase() {
         if(email.getText().toString().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
             if(password.getText().toString().equals(confirmPass.getText().toString())){
-
+                signUpProgress.setVisibility(View.VISIBLE);
                 mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                signUpProgress.setVisibility(View.INVISIBLE);
+                                signUpButton.setEnabled(true);
+                                signUpButton.setTextColor(getResources().getColor(R.color.white));
                                 if (task.isSuccessful()){
                                     Intent intent = new Intent(getActivity(), MainActivity.class);
                                     getActivity().startActivity(intent);
                                     getActivity().finish();
                                 } else {
-                                    Toast.makeText(getContext(), task.getException().getMessage(),Toast.LENGTH_SHORT).show();
-                                    signUpButton.setEnabled(true);
-                                    signUpButton.setTextColor(getResources().getColor(R.color.white));
+                                    Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -174,6 +179,7 @@ public class SignUpFragment extends Fragment {
             signUpButton.setTextColor(getResources().getColor(R.color.white));
         }
     }
+
 
     private void setFragment(Fragment fragment)
     {

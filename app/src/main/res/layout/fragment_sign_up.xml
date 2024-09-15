@@ -71,20 +71,20 @@
         app:layout_constraintTop_toBottomOf="@+id/userName" />
 
     <EditText
-        android:id="@+id/Password"
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:padding="15dp"
-        android:hint="Password (Atleast 6 characters) "
-        android:textColorHint="#d0d1d4"
-        android:textColor="#d0d1d4"
-        android:fontFamily="casual"
         android:background="@drawable/edittext_background"
         android:ems="10"
+        android:fontFamily="casual"
+        android:hint="Password (Atleast 6 characters) "
         android:inputType="textPassword"
+        android:padding="15dp"
+        android:textColor="#d0d1d4"
+        android:textColorHint="#d0d1d4"
         app:layout_constraintEnd_toEndOf="@+id/emailID"
         app:layout_constraintStart_toStartOf="@+id/emailID"
         app:layout_constraintTop_toBottomOf="@+id/emailID" />
@@ -104,14 +104,14 @@
         android:background="@drawable/edittext_background"
         android:ems="10"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/Password"
-        app:layout_constraintStart_toStartOf="@+id/Password"
-        app:layout_constraintTop_toBottomOf="@+id/Password" />
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,15 +144,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="45dp"
         android:layout_marginEnd="80dp"
+        android:background="@drawable/gradient_background"
         android:enabled="true"
-        app:backgroundTint="@null"
-        android:background="@drawable/gradient_background"        android:fontFamily="casual"
+        android:fontFamily="casual"
         android:text="Sign Up"
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="@+id/confirmPass"
         app:layout_constraintStart_toStartOf="@+id/confirmPass"
         app:layout_constraintTop_toBottomOf="@+id/confirmPass" />
+
+    <ProgressBar
+        android:id="@+id/signUpProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/endColor"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/signUpButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
