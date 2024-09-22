@@ -11,11 +11,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
 import com.example.musicapp.UploadActivity;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.example.musicapp.R;
 import com.example.musicapp.Class.Song;
 import com.example.musicapp.Adapter.SongsAdapter;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -26,6 +31,8 @@ public class MusicManagerActivity extends AppCompatActivity {
     SearchView searchView;
     FloatingActionButton fab;
     SongsAdapter songsAdapter;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    CollectionReference ref=db.collection("Music");
 
 
     @Override
@@ -45,6 +52,19 @@ public class MusicManagerActivity extends AppCompatActivity {
         lvSongs.setAdapter(songsAdapter);
         showAllSongs();
 
+
+        ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+                {
+                    Song song=documentSnapshot.toObject(Song.class);
+                    song.setKey(documentSnapshot.getId());
+                    songArrayList.add(song);
+                }
+                songsAdapter.notifyDataSetChanged();
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

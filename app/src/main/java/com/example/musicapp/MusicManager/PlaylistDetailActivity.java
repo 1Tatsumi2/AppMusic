@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +24,7 @@ import com.example.musicapp.Class.Playlist;
 import com.example.musicapp.Class.Song;
 import com.example.musicapp.Playlist.EditPlaylistActivity;
 import com.example.musicapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -157,7 +159,7 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                 deleteMusic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        confirmDelete();
+                        confirmDelete(PlaylistDetailActivity.this);
                     }
                 });
                 editPlaylist.setOnClickListener(new View.OnClickListener() {
@@ -212,14 +214,34 @@ public class PlaylistDetailActivity extends AppCompatActivity {
             }
 
             private void deleteSong() {
-        FirebaseStorage storage=FirebaseStorage.getInstance();
-        StorageReference imageReference = storage.getReferenceFromUrl(imageToDelete);
-        imageReference.delete();
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference imageReference = storage.getReferenceFromUrl(imageToDelete);
 
-//        ref=db.collection("Playlist").document(key);
-//        ref.delete();
-        Toast.makeText(PlaylistDetailActivity.this, "Delete success", Toast.LENGTH_SHORT).show();
-                finish();
+                // Xóa hình ảnh từ Firebase Storage
+                imageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Xóa tài liệu Playlist sau khi hình ảnh đã được xóa thành công
+                        final DocumentReference ref = db.collection("Playlist").document(key);
+                        ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(PlaylistDetailActivity.this, "Delete success", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(PlaylistDetailActivity.this, "Failed to delete playlist", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(PlaylistDetailActivity.this, "Failed to delete image", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
         });
