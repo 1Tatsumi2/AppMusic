@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musicapp.Activities.MainActivity;
+import com.example.musicapp.Activities.MusicPlayer;
+import com.example.musicapp.MusicManager.MusicManagerActivity;
 import com.example.musicapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -128,7 +130,7 @@ public class SignInFragment extends Fragment {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             signInProgress.setVisibility(View.INVISIBLE);
                             if(task.isSuccessful()) {
-                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                Intent intent = new Intent(getActivity(), MusicManagerActivity.class);
                                 getActivity().startActivity(intent);
                                 getActivity().finish();
                             } else {

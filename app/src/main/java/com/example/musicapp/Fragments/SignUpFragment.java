@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musicapp.Activities.MainActivity;
+import com.example.musicapp.Activities.MusicPlayer;
+import com.example.musicapp.MusicManager.MusicManagerActivity;
 import com.example.musicapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -160,9 +162,10 @@ public class SignUpFragment extends Fragment {
                                 signUpButton.setEnabled(true);
                                 signUpButton.setTextColor(getResources().getColor(R.color.white));
                                 if (task.isSuccessful()){
-                                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                                    getActivity().startActivity(intent);
-                                    getActivity().finish();
+                                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.register_frame_layout, new SignInFragment()); // R.id.fragment_container là id của container chứa fragment
+                                    fragmentTransaction.addToBackStack(null);
+                                    fragmentTransaction.commit();
                                 } else {
                                     Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
