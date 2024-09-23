@@ -5,13 +5,14 @@ import java.io.Serializable;
 
 public class Song implements Serializable {
 
-    private String title;
-    private String artist;
-    private String path;
-    private int duration;
-    private String image;
+    private String NameSong;
+    private String Singer;
+    private String MP3;
+    private int Duration;
+    private String Image;
     private String album;
     private String key;
+    private String Video;
 
 
     public String getKey() {
@@ -22,53 +23,54 @@ public class Song implements Serializable {
         this.key = key;
     }
 
-    public Song(String title, String artist, String path, int duration, String image, String album) {
-        this.title = title;
-        this.artist = artist;
-        this.path = path;
-        this.duration = duration;
-        this.image = image;
+    public Song(String NameSong, String singer, String mp3, int Duration, String image, String album, String video) {
+        this.NameSong = NameSong;
+        this.Singer = singer;
+        this.MP3 = mp3;
+        this.Duration = Duration;
+        this.Image = image;
         this.album = album;
+        this.Video = video;
     }
 
-    public String getTitle() {
-        return title;
+    public String getNameSong() {
+        return NameSong;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setNameSong(String nameSong) {
+        NameSong = nameSong;
     }
 
-    public String getArtist() {
-        return artist;
+    public String getSinger() {
+        return Singer;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
+    public void setSinger(String singer) {
+        Singer = singer;
     }
 
-    public String getPath() {
-        return path;
+    public String getMP3() {
+        return MP3;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setMP3(String MP3) {
+        this.MP3 = MP3;
     }
 
     public int getDuration() {
-        return duration;
+        return Duration;
     }
 
     public void setDuration(int duration) {
-        this.duration = duration;
+        Duration = duration;
     }
 
     public String getImage() {
-        return image;
+        return Image;
     }
 
     public void setImage(String image) {
-        this.image = image;
+        Image = image;
     }
 
     public String getAlbum() {
@@ -78,4 +80,13 @@ public class Song implements Serializable {
     public void setAlbum(String album) {
         this.album = album;
     }
+
+    public String getVideo() {
+        return Video;
+    }
+
+    public void setVideo(String video) {
+        Video = video;
+    }
 }
+

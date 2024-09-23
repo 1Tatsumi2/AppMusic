@@ -59,13 +59,13 @@ public class MusicDetailActivity extends AppCompatActivity {
         }
 
         // getting out the song name
-        String name = song.getTitle();
+        String name = song.getNameSong();
         tvTitle.setText(name);
-        String artist=song.getArtist();
+        String artist=song.getSinger();
         String duration = millisecondsToString(song.getDuration());
         tvDuration.setText(duration);
         tvArtist.setText(artist);
-        Uri uri = Uri.parse(song.getPath());
+        Uri uri = Uri.parse(song.getMP3());
         mMediaPlayer = MediaPlayer.create(this, uri);
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -146,11 +146,11 @@ public class MusicDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mMediaPlayer.stop();
                 Intent intent=new Intent(MusicDetailActivity.this, UpdateActivity.class)
-                        .putExtra("Title",song.getTitle())
-                        .putExtra("Artist",song.getArtist())
+                        .putExtra("Title",song.getNameSong())
+                        .putExtra("Artist",song.getSinger())
                         .putExtra("Album",song.getAlbum())
                         .putExtra("Image",song.getImage())
-                        .putExtra("Audio",song.getPath())
+                        .putExtra("Audio",song.getMP3())
                         .putExtra("Key",song.getKey())
                         .putExtra("Duration",mMediaPlayer.getDuration());
                 mMediaPlayer.stop();
@@ -194,7 +194,7 @@ public class MusicDetailActivity extends AppCompatActivity {
 
     private void deleteSong() {
         FirebaseStorage storage=FirebaseStorage.getInstance();
-        StorageReference audioReference = storage.getReferenceFromUrl(song.getPath());
+        StorageReference audioReference = storage.getReferenceFromUrl(song.getMP3());
         StorageReference imageReference = storage.getReferenceFromUrl(song.getImage());
 
         Task<Void> deleteAudio = audioReference.delete();

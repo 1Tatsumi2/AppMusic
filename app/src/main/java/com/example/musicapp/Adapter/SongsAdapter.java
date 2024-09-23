@@ -17,30 +17,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongsAdapter extends ArrayAdapter<Song> {
-    private List<Song> songList;
+    private List<Song> songList;  // List to hold songs
 
-
+    // Constructor
     public SongsAdapter(@NonNull Context context, @NonNull List<Song> objects) {
         super(context, 0, objects);
+        this.songList = objects;  // Initialize songList with the objects passed
     }
 
     @Nullable
     @Override
     public Song getItem(int position) {
-        return songList.get(position);
+        return songList.get(position);  // Use the correct list
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_song,null);
+        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_song, null);
 
-        TextView tvTitle = convertView.findViewById(R.id.tvTitle);
-        TextView tvArtist = convertView.findViewById(R.id.tvArtist);
+        TextView tvNameSong = convertView.findViewById(R.id.tvNameSong);
+        TextView tvSinger = convertView.findViewById(R.id.tvSinger);
 
-        Song song = getItem(position);
-        tvArtist.setText(song.getArtist());
-        tvTitle.setText(song.getTitle()); 
+        Song song = getItem(position);  // Fetch song from the correct list
+        if (song != null) {
+            tvSinger.setText(song.getSinger());
+            tvNameSong.setText(song.getNameSong());
+        }
 
         return convertView;
     }
@@ -51,15 +54,15 @@ public class SongsAdapter extends ArrayAdapter<Song> {
         return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
     }
 
-
     @Override
     public int getCount() {
-        return songList.size();
+        return songList != null ? songList.size() : 0;  // Check for null to avoid NullPointerException
     }
 
-    public void searchSongLst(ArrayList<Song> searchList)
-    {
+    // Method to search and update the song list
+    public void searchSongLst(ArrayList<Song> searchList) {
         songList = searchList;
-        notifyDataSetChanged();
+        notifyDataSetChanged();  // Notify adapter to refresh the list
     }
 }
+

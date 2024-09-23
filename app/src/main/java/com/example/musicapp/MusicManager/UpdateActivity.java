@@ -50,8 +50,8 @@ public class UpdateActivity extends AppCompatActivity {
     TextView file;
     Button saveButton, audioSave;
     EditText name,artist,singer,album;
-    Uri uriImage,uriAu;
-    String key,oldImageUrl,oldAudioUrl,imageUrl,audioUrl;
+    Uri uriImage,uriAu,uriVideo;
+    String key,oldImageUrl,oldAudioUrl,oldVideo,imageUrl,audioUrl,videoUpdate;
     MediaPlayer mediaPlayer;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
@@ -100,6 +100,7 @@ public class UpdateActivity extends AppCompatActivity {
                         if(o.getResultCode()== Activity.RESULT_OK){
                             Intent data=o.getData();
                             uriAu=data.getData();
+                            uriVideo=data.getData();
                             file.setText("File selected");
                         }
                         else {
@@ -141,15 +142,16 @@ public class UpdateActivity extends AppCompatActivity {
         {
           Glide.with(UpdateActivity.this).load(bundle.getString("Image")).into(updateImage);
             name.setText(bundle.getString("Title"));
-            artist.setText(bundle.getString("Artist"));
             singer.setText(bundle.getString("Singer"));
             key=bundle.getString("Key");
             oldImageUrl=bundle.getString("Image");
             oldAudioUrl=bundle.getString("Audio");
             duration=bundle.getInt("Duration");
+            oldVideo=bundle.getString("Video");
         }
         imageUrl=oldImageUrl;
         audioUrl=oldAudioUrl;
+        videoUpdate = oldVideo;
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,9 +215,12 @@ public class UpdateActivity extends AppCompatActivity {
                         .child(uriImage.getLastPathSegment());
                 StorageReference storageReferenceAu = FirebaseStorage.getInstance().getReference().child("Audio")
                         .child(uriAu.getLastPathSegment());
-
+                StorageReference storageReferenceVid = FirebaseStorage.getInstance().getReference().child("Video")
+                        .child(uriVideo.getLastPathSegment());
                 UploadTask uploadTaskImg = storageReferenceImg.putFile(uriImage);
                 UploadTask uploadTaskAu = storageReferenceAu.putFile(uriAu);
+                UploadTask uploadTaskVid = storageReferenceAu.putFile(uriVideo);
+
 
                 uploadTaskImg.continueWithTask(task -> {
                     if (!task.isSuccessful()) {
@@ -234,6 +239,21 @@ public class UpdateActivity extends AppCompatActivity {
                         }).addOnCompleteListener(taskAu -> {
                             if (taskAu.isSuccessful()) {
                                 audioUrl = taskAu.getResult().toString();
+
+                                // Call UploadData() only when both download URLs have been retrieved
+                                dialog.dismiss();
+                                UpdateData();
+                            }
+                        });
+
+                        uploadTaskVid.continueWithTask(taskAu -> {
+                            if (!taskAu.isSuccessful()) {
+                                throw taskAu.getException();
+                            }
+                            return storageReferenceVid.getDownloadUrl();
+                        }).addOnCompleteListener(taskAu -> {
+                            if (taskAu.isSuccessful()) {
+                                videoUpdate = taskAu.getResult().toString();
 
                                 // Call UploadData() only when both download URLs have been retrieved
                                 dialog.dismiss();
@@ -323,7 +343,7 @@ public class UpdateActivity extends AppCompatActivity {
             mediaPlayer= MediaPlayer.create(UpdateActivity.this,uriAu);
             duration = mediaPlayer.getDuration();
         }
-        Song song=new Song(nameUpdate,artistUpdate,audioUrl,duration,imageUrl,albumUpdate);
+        Song song=new Song(nameUpdate,singerUpdate,audioUrl,duration,imageUrl,albumUpdate,videoUpdate);
         ref=db.collection("Music").document(key);
         ref.set(song).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

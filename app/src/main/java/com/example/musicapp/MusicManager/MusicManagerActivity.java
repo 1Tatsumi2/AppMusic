@@ -47,18 +47,16 @@ public class MusicManagerActivity extends AppCompatActivity {
 
         songArrayList = new ArrayList<>();
 
-
-        SongsAdapter songsAdapter = new SongsAdapter(this,songArrayList);
+        // Sử dụng biến toàn cục songsAdapter thay vì tạo biến cục bộ
+        songsAdapter = new SongsAdapter(this, songArrayList);
         lvSongs.setAdapter(songsAdapter);
         showAllSongs();
-
 
         ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
-                {
-                    Song song=documentSnapshot.toObject(Song.class);
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    Song song = documentSnapshot.toObject(Song.class);
                     song.setKey(documentSnapshot.getId());
                     songArrayList.add(song);
                 }
@@ -69,12 +67,11 @@ public class MusicManagerActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MusicManagerActivity.this, UploadActivity.class);
+                Intent intent = new Intent(MusicManagerActivity.this, UploadActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -99,12 +96,13 @@ public class MusicManagerActivity extends AppCompatActivity {
                 Song song = songsAdapter.getItem(position);
                 Intent openMusicPlayer = new Intent(MusicManagerActivity.this, MusicDetailActivity.class);
                 openMusicPlayer.putExtra("song", song);
-                openMusicPlayer.putExtra("key",song.getKey());
+                openMusicPlayer.putExtra("key", song.getKey());
                 startActivity(openMusicPlayer);
                 finish();
             }
         });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -114,8 +112,8 @@ public class MusicManagerActivity extends AppCompatActivity {
     public void searchList(String text) {
         ArrayList<Song> searchLists = new ArrayList<>();
         for (Song data : songArrayList) {
-            if(data.getTitle().toLowerCase().contains(text.toLowerCase()) ||
-                    data.getArtist().toLowerCase().contains(text.toLowerCase())) {
+            if(data.getNameSong().toLowerCase().contains(text.toLowerCase()) ||
+                    data.getSinger().toLowerCase().contains(text.toLowerCase())) {
                 searchLists.add(data);
             }
         }
