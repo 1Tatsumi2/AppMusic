@@ -8,6 +8,5 @@
     <color name="endColor">#D9519B</color>
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
-
-
+    <color name="textWhite">#A4A4A4</color>
 </resources>

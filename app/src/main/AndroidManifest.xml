@@ -15,6 +15,10 @@
         android:theme="@style/Theme.MusicApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.SongsListActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".Playlist.EditPlaylistActivity"
             android:exported="true">
 
@@ -53,16 +57,13 @@
             android:exported="true" />
         <activity
             android:name=".Activities.SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activities.MainActivity"
-            android:exported="true" />
+            android:exported="true">
+           
+        </activity>
+
     </application>
 
 </manifest>
