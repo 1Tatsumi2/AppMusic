@@ -17,6 +17,41 @@
         <activity
             android:name=".Activities.SongsListActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".Playlist.EditPlaylistActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".MusicManager.AddPlaylistToMusicActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".MusicManager.PlaylistDetailActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".MusicManager.UpdateActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".MusicManager.MusicDetailActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".UploadActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MusicManager.MusicManagerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.MusicPlayer"
+            android:exported="true" />
         <activity
             android:name=".Activities.RegisterActivity"
             android:exported="true" />
@@ -26,12 +61,9 @@
         <activity
             android:name=".Activities.MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+           
         </activity>
+
     </application>
 
 </manifest>
