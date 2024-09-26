@@ -1,67 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
-    android:padding="16dp"
     tools:context=".Activities.MainActivity">
 
-    <RelativeLayout
+    <!-- FrameLayout chứa các fragment -->
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/toolbar">
-        <ImageView
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:src="@drawable/logo2"
-            android:layout_centerVertical="true"/>
+        android:layout_height="match_parent" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Welcome back"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:gravity="center"/>
-
-        <ImageView
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:src="@drawable/baseline_menu_24"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
-
-    </RelativeLayout>
-
-
-    <ScrollView
+    <!-- BottomNavigationView đặt ở cuối màn hình -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:layout_below="@id/toolbar">
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemPaddingBottom="10dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Categories"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:fontFamily="sans-serif-medium"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/categories_recycler_view"
-                />
-        </LinearLayout>
-
-        </ScrollView>
 </RelativeLayout>

@@ -130,7 +130,8 @@ public class SignInFragment extends Fragment {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             signInProgress.setVisibility(View.INVISIBLE);
                             if(task.isSuccessful()) {
-                                Intent intent = new Intent(getActivity(), MusicManagerActivity.class);
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+
                                 getActivity().startActivity(intent);
                                 getActivity().finish();
                             } else {
