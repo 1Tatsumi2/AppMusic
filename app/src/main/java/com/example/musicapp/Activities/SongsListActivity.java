@@ -35,7 +35,7 @@ public class SongsListActivity extends AppCompatActivity {
     }
     private void setupSongsListRecyclerView() {
         // Khởi tạo adapter với danh sách các bài hát
-        songsListAdapter = new SongsListAdapter(category.getSongs());
+        songsListAdapter = new SongsListAdapter(category.getSongs(),this);
         // Thiết lập LayoutManager cho RecyclerView
         binding.songsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Gán adapter cho RecyclerView
