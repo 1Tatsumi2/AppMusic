@@ -3,14 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.SearchFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.SearchFragment"
+    android:dividerHeight="1dp">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:text="Search Fragment" />
+        android:padding="16dp"
+        android:background="@drawable/background_color"
+        tools:context=".ListMusicActivity">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/black"
+            android:focusable="false"
+            app:iconifiedByDefault="true"
+            app:queryHint="Search by song, singer and artist"
+            app:searchHintIcon="@null"
+            app:searchIcon="@drawable/baseline_manage_search_24" />
+
+        <ListView
+            android:id="@+id/lvSongs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/search"
+            android:layout_marginTop="25dp"/>
+
+    </RelativeLayout>
 
 </FrameLayout>

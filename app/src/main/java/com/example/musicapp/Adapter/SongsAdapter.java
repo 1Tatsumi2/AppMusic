@@ -61,7 +61,8 @@ public class SongsAdapter extends ArrayAdapter<Song> {
 
     // Method to search and update the song list
     public void searchSongLst(ArrayList<Song> searchList) {
-        songList = searchList;
+        songList.clear();
+        songList.addAll(searchList);
         notifyDataSetChanged();  // Notify adapter to refresh the list
     }
 }

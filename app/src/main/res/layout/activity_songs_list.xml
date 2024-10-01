@@ -8,7 +8,7 @@
     android:background="@color/black"
     android:padding="16dp"
     android:gravity="center_horizontal"
-    tools:context=".Activities.SongsListActivity">
+    tools:context=".Playlist.SongsListActivity">
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"

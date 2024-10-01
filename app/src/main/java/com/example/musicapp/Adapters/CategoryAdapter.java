@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.musicapp.Activities.SongsListActivity;
+import com.example.musicapp.Playlist.SongsListActivity;
 import com.example.musicapp.Models.CategoryModel;
 import com.example.musicapp.databinding.CategoryItemRecyclerRowBinding;
 import java.util.List;
