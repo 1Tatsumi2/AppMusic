@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.musicapp.Playlist.SongsListActivity;
 import com.example.musicapp.Models.CategoryModel;
 import com.example.musicapp.databinding.CategoryItemRecyclerRowBinding;
+
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
@@ -53,12 +55,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
             Glide.with(binding.coverImageView.getContext())
                     .load(category.getCoverUrl())
                     .into(binding.coverImageView);
+
             // Lấy context từ binding
             Context context = binding.getRoot().getContext();
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // Khởi động SongsListActivity
+                    SongsListActivity.category = category;
                     Intent intent = new Intent(context, SongsListActivity.class);
                     context.startActivity(intent);
                 }

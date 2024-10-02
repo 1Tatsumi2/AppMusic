@@ -22,6 +22,15 @@ public class Song implements Serializable {
     public void setKey(String key) {
         this.key = key;
     }
+    public Song() {
+        this.NameSong = "";
+        this.Singer = "";
+        this.MP3 = "";
+        this.Duration = 0;
+        this.Image = "";
+        this.album = "";
+        this.Video = "";
+    }
 
     public Song(String NameSong, String singer, String mp3, int Duration, String image, String album, String video) {
         this.NameSong = NameSong;
