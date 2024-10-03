@@ -1,22 +1,39 @@
 package com.example.musicapp.Fragments;
 
+import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
-
-import com.example.musicapp.Activities.MusicPlayer;
 import com.example.musicapp.Adapter.SongsAdapter;
 import com.example.musicapp.Class.Song;
+import com.example.musicapp.Activities.MusicPlayer;
 import com.example.musicapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,9 +42,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SearchFragment extends Fragment {
-
 
     List<Song> songArrayList;
     ListView lvSongs;
@@ -37,7 +54,7 @@ public class SearchFragment extends Fragment {
     String receivedString;
     Boolean isSth;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
-    CollectionReference ref=db.collection("Music");
+    CollectionReference ref=db.collection("Songs");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +62,9 @@ public class SearchFragment extends Fragment {
 
         lvSongs = view.findViewById(R.id.lvSongs);
         searchView=view.findViewById(R.id.search);
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(Color.WHITE);  // Đặt màu chữ trắng
+        searchEditText.setHintTextColor(Color.LTGRAY);  // Đặt màu gợi ý là xám nhạt
 
         songArrayList = new ArrayList<>();
 
@@ -63,30 +83,24 @@ public class SearchFragment extends Fragment {
         ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    Log.d("FirebaseData", "Number of documents: " + queryDocumentSnapshots.size());
-                    songArrayList.clear();  // Clear the list before adding new data
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Song song = documentSnapshot.toObject(Song.class);
-                        song.setKey(documentSnapshot.getId());
-                        songArrayList.add(song);
-                        Log.d("FirebaseData", "Song added: " + song.getNameSong());
-                    }
-                    songsAdapter.notifyDataSetChanged();
-                } else {
-                    Log.d("FirebaseData", "No documents found");
+                for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+                {
+                    Song song=documentSnapshot.toObject(Song.class);
+                    song.setKey(documentSnapshot.getId());
+                    songArrayList.add(song);
                 }
-
-                if (isSth) {
+                songsAdapter.notifyDataSetChanged();
+                if(isSth)
+                {
                     searchView.setQuery(receivedString, false);
                     searchList(receivedString);
-                    isSth = false;
-                } else {
+                    isSth=false;
+                }
+                else {
                     showAllSongs();
                 }
             }
         });
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -111,16 +125,19 @@ public class SearchFragment extends Fragment {
                 Song song = songsAdapter.getItem(position);
                 int originalPosition = songArrayList.indexOf(song);
                 Intent openMusicPlayer = new Intent(getActivity(), MusicPlayer.class);
-                openMusicPlayer.putExtra("song", song);
-                openMusicPlayer.putExtra("musics", (Serializable) songArrayList);
-                openMusicPlayer.putExtra("key",song.getKey());
+                openMusicPlayer.putExtra("NameSong", song);
+                openMusicPlayer.putExtra("MP3", (Serializable) songArrayList);
+                openMusicPlayer.putExtra("Key",song.getKey());
                 openMusicPlayer.putExtra("position",originalPosition);
                 startActivity(openMusicPlayer);
             }
         });
 
         return view;
+
+
     }
+
     public void searchList(String text)
     {
         ArrayList<Song> searchList=new ArrayList<>();
@@ -137,4 +154,6 @@ public class SearchFragment extends Fragment {
     public void showAllSongs() {
         songsAdapter.searchSongLst((ArrayList<Song>) songArrayList);
     }
+
+
 }

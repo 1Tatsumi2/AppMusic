@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.example.musicapp.Class.Playlist;
 import com.example.musicapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,33 +38,33 @@ public class PlaylistAdapter extends ArrayAdapter<Playlist> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-////        convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist,null);
-////        TextView playlistTitle=convertView.findViewById(R.id.namePlaylist);
-////        TextView playlistAuthor=convertView.findViewById(R.id.authorPlaylist);
-////        TextView playlistNumSong=convertView.findViewById(R.id.songPlaylist);
-////        ImageView image=convertView.findViewById(R.id.imagePlaylist);
-//        Playlist playlist=getItem(position);
-//
-//        Integer a=playlist.getSongNumber();
-//        String b=a.toString();
-//
-//        playlistTitle.setText(playlist.getName());
-//        playlistNumSong.setText(b);
-//
-//
-//        playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                if(Objects.equals(documentSnapshot.getString("role"), "Admin") || Objects.equals(documentSnapshot.getString("role"), "Moderator"))
-//                {
-//                    playlistAuthor.setText("DoAnChill");
-//                }
-//                else {
-//                    playlistAuthor.setText(documentSnapshot.getString("fName"));
-//                }
-//            }
-//        });
-//        Glide.with(getContext()).load(playlist.getImage()).into(image);
+        convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist,null);
+        TextView playlistTitle=convertView.findViewById(R.id.namePlaylist);
+        TextView playlistAuthor=convertView.findViewById(R.id.authorPlaylist);
+        TextView playlistNumSong=convertView.findViewById(R.id.songPlaylist);
+        ImageView image=convertView.findViewById(R.id.imagePlaylist);
+        Playlist playlist=getItem(position);
+
+        Integer a=playlist.getSongNumber();
+        String b=a.toString();
+
+        playlistTitle.setText(playlist.getName());
+        playlistNumSong.setText(b);
+
+
+        playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(Objects.equals(documentSnapshot.getString("role"), "Admin") || Objects.equals(documentSnapshot.getString("role"), "Moderator"))
+                {
+                    playlistAuthor.setText("MusicApp");
+                }
+                else {
+                    playlistAuthor.setText(documentSnapshot.getString("fName"));
+                }
+            }
+        });
+        Glide.with(getContext()).load(playlist.getImage()).into(image);
         return  convertView;
     }
 

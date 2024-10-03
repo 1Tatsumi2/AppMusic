@@ -5,11 +5,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".Playlist.EditPlaylistActivity">
+    android:background="@drawable/background_color"
+    tools:context=".Playlist.AddPlaylistActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/EditImagePlaylist"
+        android:id="@+id/uploadImagePlaylist"
         android:layout_marginTop="15dp"
         android:layout_width="120dp"
         android:layout_height="120dp"
@@ -28,11 +28,10 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/EditPlaylistName"
+        android:id="@+id/CreatePlaylistName"
         android:hint="Type playlist name"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:textColor="@color/white"
         />
 
     <TextView
@@ -46,11 +45,10 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/EditPlaylistDesc"
+        android:id="@+id/CreatePlaylistDesc"
         android:hint="Type playlist description"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:textColor="@color/white"
         />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -58,23 +56,23 @@
 
 
         <Switch
-            android:id="@+id/editIsPublic"
+            android:id="@+id/isPublic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.534"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editSpinner"
+        android:id="@+id/spinner"
         android:layout_gravity="center"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"/>
 
     <Button
         android:layout_width="match_parent"
@@ -82,9 +80,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="100dp"
-        android:text="Edit Playlist"
-        android:id="@+id/editPlaylist"
-        app:backgroundTint="@null"
-        android:background="@drawable/gradient_background" />
+        android:text="Create Playlist"
+        android:id="@+id/createPlaylist"/>
 
 </LinearLayout>
