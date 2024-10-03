@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongsAdapter extends ArrayAdapter<Song> {
-    private List<Song> songList;  // List to hold songs
+    private Context context;
+    private List<Song> songList;
 
     // Constructor
-    public SongsAdapter(@NonNull Context context, @NonNull List<Song> objects) {
-        super(context, 0, objects);
-        this.songList = objects;  // Initialize songList with the objects passed
+    public SongsAdapter(Context context, List<Song> songList) {
+        super(context, 0, songList);
+        this.context = context;
+        this.songList = songList;
     }
 
     @Nullable
@@ -33,17 +35,19 @@ public class SongsAdapter extends ArrayAdapter<Song> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_song, null);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_song, parent, false);
+        }
+
+        Song currentSong = songList.get(position);
 
         TextView tvNameSong = convertView.findViewById(R.id.tvNameSong);
         TextView tvSinger = convertView.findViewById(R.id.tvSinger);
 
-        Song song = getItem(position);  // Fetch song from the correct list
-        if (song != null) {
-            tvSinger.setText(song.getSinger());
-            tvNameSong.setText(song.getNameSong());
-        }
+        // Gán giá trị cho các TextView
+        tvNameSong.setText(currentSong.getNameSong());
+        tvSinger.setText(currentSong.getSinger());
 
         return convertView;
     }
@@ -61,8 +65,7 @@ public class SongsAdapter extends ArrayAdapter<Song> {
 
     // Method to search and update the song list
     public void searchSongLst(ArrayList<Song> searchList) {
-        songList.clear();
-        songList.addAll(searchList);
+        songList = searchList;
         notifyDataSetChanged();  // Notify adapter to refresh the list
     }
 }

@@ -1,61 +1,64 @@
 package com.example.musicapp.Class;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 public class Song implements Serializable {
 
-    private String NameSong;
-    private String Singer;
-    private String MP3;
+    private String Album;
     private int Duration;
     private String Image;
-    private String album;
-    private String key;
+    private String Key;
+    private String MP3;
+    private String NameSong;
+    private String Singer;
     private String Video;
 
+    // Constructor mặc định (cần thiết cho Firebase)
+    public Song(String nameUpdate, String singerUpdate, String audioUrl, int duration, String imageUrl, String albumUpdate, String videoUpdate) {}
+    public  Song() {}
+    // Constructor đầy đủ
+    public Song(String Album, int Duration, String Image, String Key, String MP3, String NameSong, String Singer, String Video) {
+        this.Album = Album;
+        this.Duration = Duration;
+        this.Image = Image;
+        this.Key = Key;
+        this.MP3 = MP3;
+        this.NameSong = NameSong;
+        this.Singer = Singer;
+        this.Video = Video;
+    }
+
+    // Getter và Setter
+    public String getAlbum() {
+        return Album;
+    }
+
+    public void setAlbum(String Album) {
+        this.Album = Album;
+    }
+
+    public int getDuration() {
+        return Duration;
+    }
+
+    public void setDuration(int Duration) {
+        this.Duration = Duration;
+    }
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String Image) {
+        this.Image = Image;
+    }
 
     public String getKey() {
-        return key;
+        return Key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-    public Song() {
-        this.NameSong = "";
-        this.Singer = "";
-        this.MP3 = "";
-        this.Duration = 0;
-        this.Image = "";
-        this.album = "";
-        this.Video = "";
-    }
-
-    public Song(String NameSong, String singer, String mp3, int Duration, String image, String album, String video) {
-        this.NameSong = NameSong;
-        this.Singer = singer;
-        this.MP3 = mp3;
-        this.Duration = Duration;
-        this.Image = image;
-        this.album = album;
-        this.Video = video;
-    }
-
-    public String getNameSong() {
-        return NameSong;
-    }
-
-    public void setNameSong(String nameSong) {
-        NameSong = nameSong;
-    }
-
-    public String getSinger() {
-        return Singer;
-    }
-
-    public void setSinger(String singer) {
-        Singer = singer;
+    public void setKey(String Key) {
+        this.Key = Key;
     }
 
     public String getMP3() {
@@ -66,36 +69,28 @@ public class Song implements Serializable {
         this.MP3 = MP3;
     }
 
-    public int getDuration() {
-        return Duration;
+    public String getNameSong() {
+        return NameSong;
     }
 
-    public void setDuration(int duration) {
-        Duration = duration;
+    public void setNameSong(String NameSong) {
+        this.NameSong = NameSong;
     }
 
-    public String getImage() {
-        return Image;
+    public String getSinger() {
+        return Singer;
     }
 
-    public void setImage(String image) {
-        Image = image;
+    public void setSinger(String Singer) {
+        this.Singer = Singer;
     }
 
-    public String getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-
-    public String getVideo() {
+    public String getVideo()     {
         return Video;
     }
 
-    public void setVideo(String video) {
-        Video = video;
+    public void setVideo(String Video) {
+        this.Video = Video;
     }
 }
 
