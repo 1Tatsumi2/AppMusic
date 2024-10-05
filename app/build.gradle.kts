@@ -34,6 +34,7 @@ android {
         viewBinding = true
     }
 
+
 }
 
 dependencies {
@@ -60,6 +61,16 @@ dependencies {
     implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.media:media:1.6.0")
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
+
+
+    // Thêm thư viện MediaSessionCompat
+    implementation("androidx.media:media:1.6.0")
+    // Nếu bạn sử dụng MusicService tùy chỉnh, bạn cần thêm thư viện cho service
+    implementation("androidx.core:core:1.12.0")
+// Thư viện cơ bản cho các thao tác liên quan tới AndroidX
 
 
 
