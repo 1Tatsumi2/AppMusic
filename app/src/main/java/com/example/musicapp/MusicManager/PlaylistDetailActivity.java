@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -181,7 +182,7 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                         Song song = songArrayList.get(position);
                         Intent openMusicPlayer = new Intent(PlaylistDetailActivity.this, MusicPlayer.class);
-                        openMusicPlayer.putExtra("song", song);
+                        openMusicPlayer.putExtra("song", (Parcelable) song );
                         openMusicPlayer.putExtra("key", song.getKey());
                         openMusicPlayer.putExtra("musics", (Serializable) songArrayList);
                         openMusicPlayer.putExtra("position", position);

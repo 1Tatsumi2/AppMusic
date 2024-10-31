@@ -2,6 +2,7 @@ package com.example.musicapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +15,25 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.Activities.MusicPlayer;
 import com.example.musicapp.Class.Song;
+import com.example.musicapp.R;
 import com.example.musicapp.databinding.SongListItemRecylerRowBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyViewHolder> {
 
-    private final List<String> songIdList;
-    private final Context context;  // Context cần để khởi động Activity
+    private List<String> songIdList;
+    private final Context context;
 
-    // Constructor nhận danh sách songId và context
     public SongsListAdapter(List<String> songIdList, Context context) {
         this.songIdList = songIdList;
         this.context = context;
     }
 
-    // ViewHolder class
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-
         private final SongListItemRecylerRowBinding binding;
 
         public MyViewHolder(SongListItemRecylerRowBinding binding) {
@@ -40,8 +41,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
             this.binding = binding;
         }
 
-        // Bind dữ liệu với view
-        public void bindData(String songId, Context context) {
+        public void bindData(String songId, Context context, List<String> songIdList, int position) {
             FirebaseFirestore.getInstance().collection("Songs")
                     .document(songId).get()
                     .addOnSuccessListener(documentSnapshot -> {
@@ -54,17 +54,25 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                                     .apply(new RequestOptions().transform(new RoundedCorners(32)))
                                     .into(binding.songCoverImageView);
 
-                            // Xử lý khi người dùng nhấp vào một bài hát
+                            // Set click listener for each song item
                             binding.getRoot().setOnClickListener(v -> {
-                                // Tạo Intent để mở MusicPlayer và truyền dữ liệu
                                 Intent intent = new Intent(context, MusicPlayer.class);
-                                intent.putExtra("songId", songId);
-                                intent.putExtra("songTitle", song.getNameSong());
-                                intent.putExtra("songArtist", song.getSinger());
-                                intent.putExtra("songImage", song.getImage());  // Có thể dùng trong MusicPlayer để hiển thị ảnh bìa
-                                context.startActivity(intent);  // Khởi động MusicPlayer activity
+                                intent.putStringArrayListExtra("songIdList", new ArrayList<>(songIdList));
+                                intent.putExtra("position", position);
+                                context.startActivity(intent);
                             });
+                        } else {
+                            Log.e("SongsListAdapter", "Không tìm thấy bài hát với ID: " + songId);
+                            binding.songTitleTextView.setText("Bài hát không tìm thấy");
+                            binding.songSubtitleTextView.setText("");
+                            binding.songCoverImageView.setImageResource(0);
                         }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("SongsListAdapter", "Lỗi khi lấy dữ liệu từ Firestore", e);
+                        binding.songTitleTextView.setText("Lỗi tải bài hát");
+                        binding.songSubtitleTextView.setText("");
+                        binding.songCoverImageView.setImageResource(0);
                     });
         }
     }
@@ -79,7 +87,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.bindData(songIdList.get(position), context);  // Truyền context và songId vào ViewHolder
+        holder.bindData(songIdList.get(position), context, songIdList, position);
     }
 
     @Override

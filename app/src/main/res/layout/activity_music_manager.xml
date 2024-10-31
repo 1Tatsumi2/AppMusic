@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MusicManager.MusicManagerActivity"
     tools:ignore="VisualLintBounds">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
         android:background="@drawable/background_color"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".ListMusicActivity">
 
         <androidx.appcompat.widget.SearchView
@@ -33,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/search"
-            android:layout_marginTop="25dp"/>
+            android:layout_marginTop="25dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
@@ -45,8 +47,8 @@
             android:layout_marginTop="40dp"
             android:layout_marginBottom="40dp"
             android:backgroundTint="@color/black"
-            android:src="@drawable/baseline_add_24"
             android:contentDescription="zzzz"
+            android:src="@drawable/baseline_add_24"
             app:tint="@color/white" />
 
     </RelativeLayout>

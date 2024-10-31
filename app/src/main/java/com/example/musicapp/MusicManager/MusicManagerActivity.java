@@ -3,7 +3,6 @@ package com.example.musicapp.MusicManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,13 +45,13 @@ public class MusicManagerActivity extends AppCompatActivity {
         setupFabListener();
         setupListViewItemClickListener();
 
-        Log.d(TAG, "onCreate hoàn tất");
+        Log.d(TAG, "onCreate completed");
     }
 
     private void initializeViews() {
         lvSongs = findViewById(R.id.lvSongs);
-        fab = findViewById(R.id.fab);
         searchView = findViewById(R.id.search);
+        fab = findViewById(R.id.fab);
         songArrayList = new ArrayList<>();
     }
 
@@ -67,25 +66,38 @@ public class MusicManagerActivity extends AppCompatActivity {
     }
 
     private void fetchSongsFromFirestore() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Songs")
-                .get()
+        songsRef.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         songArrayList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Song song = document.toObject(Song.class);
-                            songArrayList.add(song);
-                            Log.d(TAG, "Đã thêm bài hát: " + song.getNameSong());
+                            try {
+                                Song song = document.toObject(Song.class);
+                                song.setKey(document.getId()); // Gán document ID làm giá trị cho trường Key
+
+                                // Kiểm tra nếu chưa có Key trong Firestore
+                                if (!document.contains("Key")) {
+                                    // Cập nhật Key trong tài liệu
+                                    songsRef.document(document.getId())
+                                            .update("Key", document.getId())
+                                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Key field updated for document " + document.getId()))
+                                            .addOnFailureListener(e -> Log.e(TAG, "Error updating Key field", e));
+                                }
+                                songArrayList.add(song);
+                                Log.d(TAG, "Added song: " + song.getNameSong() + " with key: " + song.getKey());
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error converting document: ", e);
+                            }
                         }
                         songsAdapter.notifyDataSetChanged();
-                        Log.d(TAG, "Tổng số bài hát: " + songArrayList.size());
+                        Log.d(TAG, "Total songs: " + songArrayList.size());
                     } else {
-                        Log.e(TAG, "Lỗi khi lấy dữ liệu: ", task.getException());
-                        showErrorToast("Không thể tải danh sách bài hát");
+                        Log.e(TAG, "Error fetching data: ", task.getException());
+                        showErrorToast("Cannot load song list");
                     }
                 });
     }
+
     private void setupSearchView() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -96,7 +108,7 @@ public class MusicManagerActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()) {
-                    songsAdapter.searchSongLst(songArrayList); // Hiển thị lại danh sách ban đầu
+                    songsAdapter.searchSongLst(songArrayList);
                 } else {
                     searchList(newText);
                 }
@@ -114,12 +126,26 @@ public class MusicManagerActivity extends AppCompatActivity {
 
     private void setupListViewItemClickListener() {
         lvSongs.setOnItemClickListener((adapterView, view, position, l) -> {
-            Song song = songsAdapter.getItem(position);
-            if (song != null) {
-                Intent openMusicPlayer = new Intent(MusicManagerActivity.this, MusicDetailActivity.class);
-                openMusicPlayer.putExtra("NameSong", song.getNameSong());
-                openMusicPlayer.putExtra("Key", song.getKey());
-                startActivity(openMusicPlayer);
+            try {
+                Song song = songsAdapter.getItem(position);
+                if (song != null && song.getKey() != null) {
+                    Intent intent = new Intent(MusicManagerActivity.this, MusicDetailActivity.class);
+
+                    // Pass the Key stored in Firestore
+                    intent.putExtra("Key", song.getKey());
+                    intent.putExtra("NameSong", song.getNameSong());
+                    intent.putExtra("Artist", song.getArtist());
+                    intent.putExtra("Singer", song.getSinger());
+                    intent.putExtra("MP3", song.getMP3());
+                    intent.putExtra("Image", song.getImage());
+                    intent.putExtra("Duration", song.getDuration());
+
+                    Log.d(TAG, "Opening MusicDetailActivity with key: " + song.getKey());
+                    startActivity(intent);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error handling item click: ", e);
+                showErrorToast("Error opening song details");
             }
         });
     }
