@@ -42,6 +42,7 @@
 
         <activity
             android:name=".UploadActivity"
+<<<<<<< HEAD
             android:exported="true" />
         <activity
 <<<<<<< HEAD
@@ -55,6 +56,8 @@
             android:exported="true">
 =======
             android:name=".MusicManager.MusicManagerActivity"
+=======
+>>>>>>> 210ea7ea227c7f7970ee8426086ce44b068ef294
             android:exported="true" >
 >>>>>>> fa78d43303ab7df834ca92cd35a19d6c4823db09
             <intent-filter>
@@ -63,6 +66,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MusicManager.MusicManagerActivity"
+            android:exported="true" />
 
 
         <activity

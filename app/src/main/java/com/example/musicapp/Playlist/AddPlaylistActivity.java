@@ -1,15 +1,52 @@
 package com.example.musicapp.Playlist;
+<<<<<<< HEAD
 import android.os.Bundle;
+=======
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
+import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+>>>>>>> 210ea7ea227c7f7970ee8426086ce44b068ef294
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+<<<<<<< HEAD
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.musicapp.Class.Playlist;
 import com.example.musicapp.R;
+=======
+
+import com.example.musicapp.MusicManager.PlaylistDetailActivity;
+import com.example.musicapp.Class.Playlist;
+import com.example.musicapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+>>>>>>> 210ea7ea227c7f7970ee8426086ce44b068ef294
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+<<<<<<< HEAD
+=======
+import com.google.firebase.firestore.DocumentSnapshot;
+>>>>>>> 210ea7ea227c7f7970ee8426086ce44b068ef294
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;

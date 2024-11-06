@@ -9,5 +9,9 @@
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
     <color name="textWhite">#A4A4A4</color>
+<<<<<<< HEAD
     <color name="gray">#A8A8A8</color>
+=======
+    <color name="lavender">#8C78B1</color>
+>>>>>>> 210ea7ea227c7f7970ee8426086ce44b068ef294
 </resources>
