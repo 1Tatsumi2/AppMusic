@@ -1,332 +1,342 @@
 package com.example.musicapp.Activities;
 
-import static com.example.musicapp.ApplicationClass.CHANNEL_ID_2;
-import static com.example.musicapp.ApplicationClass.ACTION_NEXTS;
-import static com.example.musicapp.ApplicationClass.ACTION_PLAY;
-import static com.example.musicapp.ApplicationClass.ACTION_PREV;
+import static com.google.android.gms.common.ConnectionResult.TIMEOUT;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+<<<<<<< HEAD
 
+=======
+>>>>>>> fa78d43303ab7df834ca92cd35a19d6c4823db09
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
-import com.example.musicapp.Interface.ActionPlaying;
-import com.example.musicapp.Interface.MusicService;
-import com.example.musicapp.Interface.NotificationReceiver;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.musicapp.Class.Song;
+<<<<<<< HEAD
 import com.example.musicapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+=======
+import com.example.musicapp.Interface.ActionPlaying;
+import com.example.musicapp.R;
+>>>>>>> fa78d43303ab7df834ca92cd35a19d6c4823db09
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class MusicPlayer extends AppCompatActivity implements ActionPlaying, ServiceConnection {
 
-    Bundle songExtraData;
-    TextView tvTime, tvTitle, tvArtist;
-    TextView tvDuration;
-    int position,currentPos;
-    ImageView nextBtn, previousBtn,back, btnShuffle,btnLoop;
-    CircleImageView tvImage;
-    SeekBar seekBarTime;
-    SeekBar seekBarVolume;
-    Button btnPlay;
-    String key;
-    ImageButton dotbutton;
-    static MediaPlayer mMediaPlayer;
-    ArrayList<Song> musicList;
+    private Song currentSong;
+    private ArrayList<Song> musicList;
+    private int position;
+    private MediaPlayer mMediaPlayer;
 
-    NotificationManager notificationManager;
-    MusicService musicService;
-    MediaSessionCompat mediaSession;
-//    AdView mAdView;
-    ObjectAnimator objectAnimator;
-    LinearLayout layout;
-    String currentImageUri,UserID;
-    FirebaseFirestore db= FirebaseFirestore.getInstance();
-    FirebaseAuth fAuth= FirebaseAuth.getInstance();
-
-    Song song;
-    private boolean isShuffleOn = false;
-    private boolean isLoopOn = false;
-    private ArrayList<Integer> playedSongs = new ArrayList<>();
+    private TextView tvTitle, tvArtist, tvDuration, tvTime;
+    private SeekBar seekBarTime, seekBarVolume;
+    private ImageView tvImage, shuffleBtn, loopBtn, btnBack;
+    private Button btnPlay, nextBtn, previousBtn, back;
+    private Handler handler;
+    private boolean isLoopOn = false;  // Thêm biến kiểm tra lặp
+    private boolean isShuffleOn = false;  // Thêm biến kiểm tra xáo trộn
+    private ObjectAnimator rotateAnimator;
+    private ArrayList<String> songIdList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
-        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
-        UserID=firebaseAuth.getCurrentUser().getUid();
-        DocumentReference userReff=db.collection("Account").document(UserID);
-//        userReff.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                if(!documentSnapshot.getBoolean("premium"))
-//                {
-//                    MobileAds.initialize(MusicPlayerActivity.this, new OnInitializationCompleteListener() {
-//                        @Override
-//                        public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-//
-//                        }
-//                    });
-//                    mAdView = findViewById(R.id.adbanner);
-//                    AdRequest adRequest = new AdRequest.Builder().build();
-//                    mAdView.loadAd(adRequest);
-//                }
-//            }
-//        });
 
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        // Nhận dữ liệu từ Intent
-        song = (Song) getIntent().getSerializableExtra("song");
-        btnShuffle = findViewById(R.id.shuffleBtn);
-        btnLoop=findViewById(R.id.LoopBtn);
-        tvTime = findViewById(R.id.tvTime);
-        tvImage=findViewById(R.id.tvImage);
-        tvDuration = findViewById(R.id.tvDuration);
-        seekBarTime = findViewById(R.id.seekBarTime);
-        seekBarVolume = findViewById(R.id.seekBarVolume);
-        btnPlay = findViewById(R.id.btnPlay);
-        nextBtn = findViewById(R.id.next);
-        previousBtn = findViewById(R.id.previous);
+        // Khởi tạo các view
         tvTitle = findViewById(R.id.tvTitle);
         tvArtist = findViewById(R.id.tvArtist);
-        back = findViewById(R.id.btnBack);
-        dotbutton = findViewById(R.id.dotButton);
-        mediaSession=new MediaSessionCompat(this,"PlayerAudio");
-        objectAnimator = ObjectAnimator.ofFloat(tvImage,"rotation",0f,360f);
-        objectAnimator.setDuration(30000);
-        objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        objectAnimator.setRepeatMode(ValueAnimator.RESTART);
-        objectAnimator.setInterpolator(new LinearInterpolator());
-        objectAnimator.start();
-        UserID=fAuth.getCurrentUser().getUid();
-        layout = findViewById(R.id.layout);
-        musicList = new ArrayList<>();
+        tvDuration = findViewById(R.id.tvDuration);
+        tvImage = findViewById(R.id.tvImage);
+        btnBack = findViewById(R.id.btnBack);
+        // Khởi tạo các view
+        seekBarTime = findViewById(R.id.seekBarTime);
+        seekBarVolume = findViewById(R.id.seekBarVolume);
+        tvTime = findViewById(R.id.tvTime);
+
+        handler = new Handler();
+        btnPlay = findViewById(R.id.btnPlay);
+        shuffleBtn = findViewById(R.id.shuffleBtn);
+        loopBtn = findViewById(R.id.LoopBtn);
+
+        // Thiết lập listener cho các nút
+        btnPlay.setOnClickListener(v -> playClicked());
+        shuffleBtn.setOnClickListener(v -> toggleShuffle());
+        loopBtn.setOnClickListener(v -> toggleLoop());
+        btnBack.setOnClickListener(v -> onBackButtonClicked());
 
 
+        rotateAnimator = ObjectAnimator.ofFloat(tvImage, View.ROTATION, 0f, 360f);
+        rotateAnimator.setDuration(10000); // Xoay trong 10 giây
+        rotateAnimator.setInterpolator(new LinearInterpolator());
+        rotateAnimator.setRepeatCount(ObjectAnimator.INFINITE);
 
-        if(mMediaPlayer!=null)
-        {
-            mMediaPlayer.stop();
-        }
-
-        //getting values from previous activity
-        Intent intent = getIntent();
-        songExtraData = intent.getExtras();
-        if (songExtraData != null) {
-            key = songExtraData.getString("Key");
-            musicList = (ArrayList)songExtraData.getParcelableArrayList("musicList");
-            position = songExtraData.getInt("position", 0);
-            currentPos = position;
-
-            if (musicList != null && !musicList.isEmpty()) {
-                initializeMusicPlayer(position);
-            } else {
-                // Xử lý khi musicList bị null hoặc rỗng
-                Log.e("MusicPlayer", "musicList is null or empty");
-            }
-        } else {
-            // Xử lý khi songExtraData bị null
-            Log.e("MusicPlayer", "songExtraData is null");
-        }
-
-        btnShuffle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isShuffleOn = !isShuffleOn;
-                if (isShuffleOn) {
-                    btnShuffle.setColorFilter(Color.parseColor("#4B1F9A")); // Màu tím
-                } else {
-                    btnShuffle.setColorFilter(Color.parseColor("#FFFFFFFF")); // Màu trắng
-                }
-            }
-        });
-
-
-        btnLoop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isLoopOn = !isLoopOn;
-                if (isLoopOn) {
-                    btnLoop.setColorFilter(Color.parseColor("#4B1F9A")); // Màu tím
-                } else {
-                    btnLoop.setColorFilter(Color.parseColor("#FFFFFFFF")); // Màu trắng
-                }
-            }
-        });
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playClicked();
-            }
-        });
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextClicked();
-            }
-        });
-        previousBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prevClicked();
-            }
-        });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMediaPlayer.stop();
-                finish();
-            }
-        });
-
-    } //end main
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        // Các phương thức khác...
+        initializeViewTreeOwners();
+        songIdList = new ArrayList<>();
+        getDataFromIntent();
     }
 
-    private void initializeMusicPlayer(int position) {
-        // if mediaplayer is not null and playing reset it at the launch of activity
-
-        if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
-            mMediaPlayer.reset();
+    private void onBackButtonClicked() {
+        if (mMediaPlayer != null) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+            }
+            mMediaPlayer.release();
+            mMediaPlayer = null;
         }
-        currentPos=position;
-        // getting out the song name
-        String name = musicList.get(position).getNameSong();
-        tvTitle.setText(name);
-        String singer=musicList.get(position).getSinger();
-        tvArtist.setText(singer);
+        stopRotateAnimation();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+        finish();
+    }
+    private void toggleShuffle() {
+        isShuffleOn = !isShuffleOn;
+        shuffleBtn.setImageResource(isShuffleOn ? R.drawable.baseline_shuffle_24 : R.drawable.baseline_shuffle_24);
+
+        if (isShuffleOn) {
+            isLoopOn = false;
+            loopBtn.setImageResource(R.drawable.baseline_loop_24);
+        }
+    }
+
+    private void toggleLoop() {
+        isLoopOn = !isLoopOn;
+        loopBtn.setImageResource(isLoopOn ? R.drawable.baseline_loop_24 : R.drawable.baseline_loop_24);
+
+        if (isLoopOn) {
+
+            isShuffleOn = false;
+            shuffleBtn.setImageResource(R.drawable.baseline_shuffle_24);
+        }
+    }
+
+    private void getDataFromIntent() {
+        songIdList = getIntent().getStringArrayListExtra("songIdList");
+        position = getIntent().getIntExtra("position", -1);
+        if (songIdList != null && position != -1) {
+            loadSongs(position);
+        } else {
+            Log.e("MusicPlayer", "Không nhận được songIdList hoặc position");
+            Toast.makeText(this, "Dữ liệu không hợp lệ", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    private void loadSongs(int position) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final int[] loadedCount = {0};
+        final long startTime = System.currentTimeMillis();
+        final long TIMEOUT = 30000; // 30 seconds timeout
+
+        String songId = songIdList.get(position);
+        FirebaseFirestore.getInstance().collection("Songs").document(songId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Song song = documentSnapshot.toObject(Song.class);
+                    if (song != null) {
+                        song.setKey(songId);
+                        currentSong = song;
+                        initializeMusicPlayer();
+                    } else {
+                        Log.e("MusicPlayer", "Song data is null for id: " + songId);
+                        Toast.makeText(this, "Failed to load song", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("MusicPlayer", "Error loading song: " + songId, e);
+                    Toast.makeText(this, "Error loading song", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
+    private void checkLoadCompletion(int totalCount, int loadedCount, long startTime) {
+        if (loadedCount == totalCount || System.currentTimeMillis() - startTime > TIMEOUT) {
+            if (musicList.isEmpty()) {
+                Log.e("MusicPlayer", "Failed to load any songs");
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Failed to load songs", Toast.LENGTH_LONG).show();
+                    finish();  // Close the activity if no songs were loaded
+                });
+            } else {
+                Log.d("MusicPlayer", "Loaded " + musicList.size() + " out of " + totalCount + " songs");
+                runOnUiThread(() -> initializeMusicPlayer());
+            }
+        }
+    }
+
+    private void initializeMusicPlayer() {
+        try {
+            String songName = currentSong.getNameSong();
+            String singer = currentSong.getSinger();
+            String imageUrl = currentSong.getImage();
+            String mp3Url = currentSong.getMP3();
+            int duration = currentSong.getDuration();
+
+            tvTitle.setText(songName);
+            tvArtist.setText(singer);
+            tvDuration.setText(millisecondsToString(duration));
+
+            Glide.with(this)
+                    .load(imageUrl)
+                    .into(tvImage);
+
+            setBlurredBackground(imageUrl);
+
+            Uri uri = Uri.parse(mp3Url);
+            if (uri == null) {
+                throw new IllegalArgumentException("Invalid song URI");
+            }
+
+            if (mMediaPlayer != null) {
+                mMediaPlayer.release();
+            }
+            mMediaPlayer = MediaPlayer.create(this, uri);
+            if (mMediaPlayer == null) {
+                throw new IllegalStateException("Failed to initialize MediaPlayer");
+            }
+
+            mMediaPlayer.setOnPreparedListener(mp -> {
+                seekBarTime.setMax(mMediaPlayer.getDuration());
+                tvDuration.setText(millisecondsToString(mMediaPlayer.getDuration()));
+                btnPlay.setBackgroundResource(R.drawable.ic_pause);
+                mMediaPlayer.start();
+                setupSeekBars();
+                updateSeekBarTime();
+                startRotateAnimation();
+            });
+
+            mMediaPlayer.setOnCompletionListener(mp -> {
+                btnPlay.setBackgroundResource(R.drawable.ic_play);
+                stopRotateAnimation();
+                if (isLoopOn) {
+                    loadSongs(position);
+                } else if (isShuffleOn) {
+                    playRandomSong();
+                } else {
+                    playNextSong();
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e("MusicPlayer", "Error initializing music player", e);
+            Toast.makeText(this, "Error playing music: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+    @Override
+    public void playClicked() {
+        if (mMediaPlayer != null) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+                btnPlay.setBackgroundResource(R.drawable.ic_play);
+                pauseRotateAnimation();
+            } else {
+                mMediaPlayer.start();
+                btnPlay.setBackgroundResource(R.drawable.ic_pause);
+                resumeRotateAnimation();
+            }
+        }
+    }
+
+    private void setBlurredBackground(String imageUrl) {
         Glide.with(this)
                 .asBitmap()
-                .load(musicList.get(position).getImage())
-                .apply(new RequestOptions().transform(new BlurTransformation(75))) // Sử dụng BlurTransformation để làm mờ hình ảnh
+                .load(imageUrl)
+                .apply(new RequestOptions().transform(new BlurTransformation(25, 3)))
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        // Chuyển đổi Bitmap thành Drawable
                         Drawable drawable = new BitmapDrawable(getResources(), resource);
-
-                        // Đặt Drawable làm hình nền cho View
-                        layout.setBackground(drawable);
+                        findViewById(R.id.layout).setBackground(drawable);  // Đảm bảo layout đã được khởi tạo
                     }
 
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
                     }
                 });
-        String duration = millisecondsToString(musicList.get(position).getDuration());
-        Glide.with(this).load(musicList.get(position).getImage()).into(tvImage);
-        tvDuration.setText(duration);
-        // accessing the songs on storage
+    }
 
-        Uri uri = Uri.parse(musicList.get(position).getMP3());
+    private void playCurrentSong() {
+        initializeMusicPlayer();
+    }
 
-        // creating a mediaplayer
-        // passing the uri
+    private void playRandomSong() {
+        Random rand = new Random();
+        int newPosition;
+        do {
+            newPosition = rand.nextInt(songIdList.size());
+        } while (newPosition == position && songIdList.size() > 1);
+        position = newPosition;
+        loadSongs( position );
+    }
 
-        mMediaPlayer = MediaPlayer.create(this, uri);
+    private void playNextSong() {
+        if (songIdList != null && songIdList.size() > 0) {
+            position = (position + 1) % songIdList.size();
+            loadSongs(position);
+        }
+    }
 
-        // SETTING ON PREPARED MEDIAPLAYER
+    private void playPreviousSong() {
+        if (songIdList != null && songIdList.size() > 0) {
+            position = (position - 1 + songIdList.size()) % songIdList.size();
+            loadSongs(position);
+        }
+    }
 
-        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
 
-                // seekbar
-                seekBarTime.setMax(mMediaPlayer.getDuration());
-
-                // while mediaplayer is playing the play button should display pause
-                btnPlay.setBackgroundResource(R.drawable.ic_pause);
-                // start the mediaplayer
-                showNotification(R.drawable.ic_pause,0F);
-                mMediaPlayer.start();
-            }
-        });
-
-        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                btnPlay.setBackgroundResource(R.drawable.ic_play);
-            }
-        });
-
-        //volume bar
+    private void setupSeekBars() {
         seekBarVolume.setProgress(50);
         seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean isFromUser) {
-                // Handle progress change
-                // You can use 'progress' to get the current progress value
-                // tang giam am luong
-                float volume = (float) progress / 100f;
-                mMediaPlayer.setVolume(volume, volume);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float volume = progress / 100f;
+                if (mMediaPlayer != null) {  // Kiểm tra null
+                    mMediaPlayer.setVolume(volume, volume);
+                }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // Handle the start of tracking touch
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // Handle the stop of tracking touch
             }
         });
 
+<<<<<<< HEAD
         // if you want the the mediaplayer to go to next song after its finished playing one song its optional
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -445,169 +455,134 @@ public class MusicPlayer extends AppCompatActivity implements ActionPlaying, Ser
                 handler.postDelayed(this, 1000); // Update every 1 second
             }
         }, 0);
+=======
+>>>>>>> fa78d43303ab7df834ca92cd35a19d6c4823db09
         seekBarTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mMediaPlayer.seekTo(progress);
-                    tvTime.setText(millisecondsToString(progress));
+                if (fromUser && mMediaPlayer != null) {
+                    mMediaPlayer.seekTo( progress );
+                    if (tvTime != null) {
+                        tvTime.setText( millisecondsToString( progress ) );
+                    }
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // Handle the start of tracking touch
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // Handle the stop of tracking touch
             }
         });
     }
 
-    //chinh thoi gian
-    public String millisecondsToString(int time) {
-        int minutes = time / 1000 / 60;
-        int seconds = time / 1000 % 60;
-        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Intent intentSer=new Intent(this,MusicService.class);
-        bindService(intentSer,this,BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unbindService(this);
-    }
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        MusicService.MyBinder binder=(MusicService.MyBinder)service;
-        musicService= binder.getService();
-        musicService.setCallback(MusicPlayer.this);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        musicService=null;
-        Log.e("Disconnected",musicService+ "");
-    }
-
-    public void showNotification(int playPauseBtn, Float playbackSpeed)
-    {
-        Intent prevIntent=new Intent(this, NotificationReceiver.class).setAction(ACTION_PREV);
-        PendingIntent prevPendingIntent=PendingIntent.getBroadcast(this,0,prevIntent,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-        Intent playIntent=new Intent(this,NotificationReceiver.class).setAction(ACTION_PLAY);
-        PendingIntent playPendingIntent=PendingIntent.getBroadcast(this,0,playIntent,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-        Intent nextIntent=new Intent(this,NotificationReceiver.class).setAction(ACTION_NEXTS);
-        PendingIntent nextPendingIntent=PendingIntent.getBroadcast(this,0,nextIntent,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-        Glide.with(this)
-                .asBitmap()
-                .load(musicList.get(position).getImage())
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        Notification notification = new NotificationCompat.Builder(MusicPlayer.this, CHANNEL_ID_2)
-                                .setSmallIcon(R.drawable.baseline_music_note_24)
-                                .setLargeIcon(resource)
-                                .setContentTitle(musicList.get(position).getNameSong())
-                                .setContentText(musicList.get(position).getSinger())
-                                .addAction(R.drawable.baseline_skip_previous_24,"Previous",prevPendingIntent)
-                                .addAction(playPauseBtn,"Play",playPendingIntent)
-                                .addAction(R.drawable.baseline_skip_next_24,"Next",nextPendingIntent)
-                                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                                        .setMediaSession(mediaSession.getSessionToken()))
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .setOnlyAlertOnce(true)
-                                .build();
-                        NotificationManager notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                        notificationManager.notify(0,notification);
-
+    private void updateSeekBarTime() {
+        if (handler != null && mMediaPlayer != null) {
+            handler.postDelayed( new Runnable() {
+                @Override
+                public void run() {
+                    if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                        int currentPosition = mMediaPlayer.getCurrentPosition();
+                        if (seekBarTime != null) {
+                            seekBarTime.setProgress( currentPosition );
+                        }
+                        if (tvTime != null) {
+                            tvTime.setText( millisecondsToString( currentPosition ) );
+                        }
+                        if (tvDuration != null) {
+                            tvDuration.setText(millisecondsToString(mMediaPlayer.getDuration()));
+                        }
                     }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
-        mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,musicList.get(position).getDuration())
-                .build());
-        mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-                .setState(PlaybackStateCompat.STATE_PLAYING,mMediaPlayer.getCurrentPosition(),playbackSpeed)
-                .setActions(PlaybackStateCompat.ACTION_SEEK_TO)
-                .build());
+                    handler.postDelayed( this, 1000 );
+                }
+            }, 0 );
+        }
     }
 
     @Override
     public void nextClicked() {
-        if(isShuffleOn) {
-            Random rand = new Random();
-            position = rand.nextInt(musicList.size());
-            while(playedSongs.contains(position)) {
-                position = rand.nextInt(musicList.size());
-            }
-            playedSongs.add(position);
-            if(playedSongs.size() == musicList.size()) {
-                playedSongs.clear();
-            }
-        }
-        else {
-            if(position<musicList.size()-1)
-            {
-                position++;
-            }
-            else {
-                position=0;
-            }
-        }
-        currentPos=position;
-        initializeMusicPlayer(position);
-        if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
-            showNotification(R.drawable.ic_play,0F);
+        if (isShuffleOn) {
+            playRandomSong();
         } else {
-            showNotification(R.drawable.ic_pause,0F);
+            position = (position + 1) % musicList.size();
+            initializeMusicPlayer();
         }
     }
 
     @Override
     public void prevClicked() {
-        if(position<=0){
-            position=musicList.size()-1;
+        playPreviousSong();
+    }
+    private void startRotateAnimation() {
+        if (rotateAnimator != null && !rotateAnimator.isRunning()) {
+            rotateAnimator.start();
         }
-        else {
-            position--;
+    }
+
+    private void stopRotateAnimation() {
+        if (rotateAnimator != null) {
+            rotateAnimator.cancel();
+            tvImage.setRotation(0f); // Đặt lại góc xoay về 0
         }
-        initializeMusicPlayer(position);
-        if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
-            showNotification(R.drawable.ic_play,0F);
+    }
+
+    private void pauseRotateAnimation() {
+        if (rotateAnimator != null) {
+            rotateAnimator.pause();
+        }
+    }
+
+    private void resumeRotateAnimation() {
+        if (rotateAnimator != null) {
+            rotateAnimator.resume();
+        }
+    }
+
+
+    private String millisecondsToString(int milliseconds) {
+        StringBuilder time = new StringBuilder();
+        int minutes = (milliseconds / 1000) / 60;
+        int seconds = (milliseconds / 1000) % 60;
+
+        if (minutes < 10) {
+            time.append("0").append(minutes);
         } else {
-            showNotification(R.drawable.ic_pause,0F);
+            time.append(minutes);
         }
+
+        time.append(":");
+        if (seconds < 10) {
+            time.append("0").append(seconds);
+        } else {
+            time.append(seconds);
+        }
+
+        return time.toString();
     }
 
     @Override
-    public void playClicked() {
-        if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
-            mMediaPlayer.pause();
-            objectAnimator.pause();
-            // change the image of playpause button to play when we pause it
-            btnPlay.setBackgroundResource(R.drawable.ic_play);
-            showNotification(R.drawable.ic_play,0F);
-        } else {
-            mMediaPlayer.start();
-            // if mediaplayer is playing // the image of play button should display pause
-            objectAnimator.resume();
-            btnPlay.setBackgroundResource(R.drawable.ic_pause);
-            showNotification(R.drawable.ic_pause,0F);
-        }
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        // Kết nối dịch vụ
     }
 
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        // Ngắt kết nối dịch vụ
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+        if (handler != null) {
+            handler.removeCallbacksAndMessages( null );
+        }
+        stopRotateAnimation();
+    }
 
 }
-

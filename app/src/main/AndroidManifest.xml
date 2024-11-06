@@ -24,14 +24,27 @@
             android:exported="false" />
         <activity
             android:name=".Playlist.AddPlaylistActivity"
+<<<<<<< HEAD
             android:exported="false" />
+=======
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".Playlist.PlaylistManagerActivity"
+            android:exported="true"/>
+
+>>>>>>> fa78d43303ab7df834ca92cd35a19d6c4823db09
         <activity
             android:name=".Activities.SongsListActivity"
-            android:exported="false" />
+            android:exported="true" />
+
+
         <activity
             android:name=".UploadActivity"
             android:exported="true" />
         <activity
+<<<<<<< HEAD
             android:name=".Activities.MusicPlayer"
             android:exported="true" />
         <activity
@@ -40,15 +53,40 @@
         <activity
             android:name=".Activities.SplashActivity"
             android:exported="true">
+=======
+            android:name=".MusicManager.MusicManagerActivity"
+            android:exported="true" >
+>>>>>>> fa78d43303ab7df834ca92cd35a19d6c4823db09
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity
+            android:name=".Activities.MusicPlayer"
+            android:exported="true" />
+
+
+        <activity
+            android:name=".Activities.RegisterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.SplashActivity"
+            android:exported="true"/>
+
+
+
         <activity
             android:name=".Activities.MainActivity"
             android:exported="true" />
+
+
+
+
+
     </application>
 
 </manifest>

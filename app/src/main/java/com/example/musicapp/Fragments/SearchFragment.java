@@ -15,6 +15,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -125,7 +126,7 @@ public class SearchFragment extends Fragment {
                 Song song = songsAdapter.getItem(position);
                 int originalPosition = songArrayList.indexOf(song);
                 Intent openMusicPlayer = new Intent(getActivity(), MusicPlayer.class);
-                openMusicPlayer.putExtra("NameSong", song);
+                openMusicPlayer.putExtra("NameSong", (Parcelable) song );
                 openMusicPlayer.putExtra("MP3", (Serializable) songArrayList);
                 openMusicPlayer.putExtra("Key",song.getKey());
                 openMusicPlayer.putExtra("position",originalPosition);
