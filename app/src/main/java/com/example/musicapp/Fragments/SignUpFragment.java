@@ -1,6 +1,5 @@
 package com.example.musicapp.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,9 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.musicapp.Activities.MainActivity;
-import com.example.musicapp.Activities.MusicPlayer;
-import com.example.musicapp.MusicManager.MusicManagerActivity;
 import com.example.musicapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

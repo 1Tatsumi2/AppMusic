@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,42 +17,19 @@
         android:theme="@style/Theme.MusicApp"
         tools:targetApi="31">
         <activity
-            android:name=".Playlist.AddMusicToPlaylistActivity"
-            android:exported="true">
-        </activity>
+            android:name=".Playlist.AddSongToPlaylistActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Playlist.PlaylistDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".Playlist.AddPlaylistActivity"
-            android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".Playlist.PlaylistManagerActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".Activities.SongsListActivity"
             android:exported="false" />
         <activity
-            android:name=".Playlist.EditPlaylistActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MusicManager.AddPlaylistToMusicActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MusicManager.PlaylistDetailActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MusicManager.UpdateActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MusicManager.MusicDetailActivity"
-            android:exported="true" />
-        <activity
             android:name=".UploadActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MusicManager.MusicManagerActivity"
             android:exported="true" />
         <activity
             android:name=".Activities.MusicPlayer"

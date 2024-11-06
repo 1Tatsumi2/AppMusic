@@ -7,75 +7,55 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.bumptech.glide.Glide;
 import com.example.musicapp.Class.Playlist;
 import com.example.musicapp.R;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PlaylistAdapter extends ArrayAdapter<Playlist> {
     private List<Playlist> playlists;
 
     public PlaylistAdapter(@NonNull Context context, int resource, @NonNull List<Playlist> objects) {
         super(context, resource, objects);
-        this.playlists = new ArrayList<>(objects);
-    }
-
-    @Nullable
-    @Override
-    public Playlist getItem(int position) {
-        return playlists.get(position);
+        this.playlists = objects;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist,null);
-        TextView playlistTitle=convertView.findViewById(R.id.namePlaylist);
-        TextView playlistAuthor=convertView.findViewById(R.id.authorPlaylist);
-        TextView playlistNumSong=convertView.findViewById(R.id.songPlaylist);
-        ImageView image=convertView.findViewById(R.id.imagePlaylist);
-        Playlist playlist=getItem(position);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist, parent, false);
+        }
 
-        Integer a=playlist.getSongNumber();
-        String b=a.toString();
+        TextView playlistTitle = convertView.findViewById(R.id.namePlaylist);
+        TextView playlistAuthor = convertView.findViewById(R.id.authorPlaylist);
+        TextView playlistNumSong = convertView.findViewById(R.id.songPlaylist);
+        ImageView image = convertView.findViewById(R.id.imagePlaylist);
+
+        Playlist playlist = getItem(position);
 
         playlistTitle.setText(playlist.getName());
-        playlistNumSong.setText(b);
+        playlistNumSong.setText("Số lượng bài hát: " + playlist.getSongNumber()); // Thêm nhãn cho số lượng bài hát
 
-
-        playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(Objects.equals(documentSnapshot.getString("role"), "Admin") || Objects.equals(documentSnapshot.getString("role"), "Moderator"))
-                {
-                    playlistAuthor.setText("MusicApp");
-                }
-                else {
-                    playlistAuthor.setText(documentSnapshot.getString("fName"));
-                }
+        // Hiển thị tên tác giả từ DocumentReference
+        playlist.getAuthor().get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String authorName = documentSnapshot.getString("name"); // Thay "name" bằng tên trường chứa tên tác giả trong Firestore
+                playlistAuthor.setText("Tác giả: " + authorName);
+            } else {
+                playlistAuthor.setText("Unknown");
             }
+        }).addOnFailureListener(e -> {
+            playlistAuthor.setText("Error");
         });
+
+        // Hiển thị ảnh playlist
         Glide.with(getContext()).load(playlist.getImage()).into(image);
-        return  convertView;
+
+        return convertView;
     }
 
-    @Override
-    public int getCount() {
-        return playlists.size();
-    }
 
-    public void searchPlaylist(ArrayList<Playlist> searchList)
-    {
-        playlists = searchList;
-        notifyDataSetChanged();
-    }
 }

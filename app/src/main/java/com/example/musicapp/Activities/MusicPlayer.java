@@ -18,7 +18,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.media.tv.AdRequest;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,20 +53,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.musicapp.Class.Song;
-import com.example.musicapp.Interface.MusicService;
-import com.example.musicapp.Interface.NotificationReceiver;
-import com.example.musicapp.MusicManager.AddPlaylistToMusicActivity;
 import com.example.musicapp.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -373,7 +363,7 @@ public class MusicPlayer extends AppCompatActivity implements ActionPlaying, Ser
         });
 
         // working on seekbar
-        dotbutton.setOnClickListener(new View.OnClickListener() {
+       /* dotbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(v.getContext(), dotbutton);
@@ -438,7 +428,7 @@ public class MusicPlayer extends AppCompatActivity implements ActionPlaying, Ser
                 });
                 popupMenu.show();
             }
-        });
+        });*/
 
         // thanh thoi gian bai hat
         seekBarTime.setMax(mMediaPlayer.getDuration());

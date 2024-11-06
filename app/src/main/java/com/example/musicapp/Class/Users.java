@@ -4,14 +4,16 @@ import java.io.Serializable;
 
 public class Users implements Serializable {
     private String fName;
+    private String name;
     private String email;
     private String image;
     private String role;
     private String key;
     private Boolean premium;
 
-    public Users(String fName, String email, String image, String role,Boolean premium) {
+    public Users(String fName, String name, String email, String image, String role,Boolean premium) {
         this.fName = fName;
+        this.name = name;
         this.email = email;
         this.image = image;
         this.role = role;
@@ -26,6 +28,13 @@ public class Users implements Serializable {
         this.fName = fName;
     }
 
+    public String getName() {
+        return name;
+    }
+    public void setName(String name)
+    {
+        this.name=name;
+    }
     public String getEmail() {
         return email;
     }
