@@ -1,5 +1,6 @@
 package com.example.musicapp.Playlist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,12 +48,22 @@ public class PlaylistDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Không tìm thấy Playlist", Toast.LENGTH_SHORT).show();
             finish();
         }
+        findViewById(R.id.add_song_button).setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddSongToPlaylistActivity.class);
+            intent.putExtra("playlistId", playlistId);
+            startActivity(intent);
+        });
     }
 
     private void loadPlaylistDetails(String playlistId) {
         DocumentReference playlistRef = db.collection("Playlists").document(playlistId);
-        playlistRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
+        playlistRef.addSnapshotListener((documentSnapshot, error) -> {
+            if (error != null) {
+                Toast.makeText(this, "Lỗi khi lắng nghe thay đổi", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (documentSnapshot != null && documentSnapshot.exists()) {
                 String name = documentSnapshot.getString("name");
                 String description = documentSnapshot.getString("description");
                 List<String> songIds = (List<String>) documentSnapshot.get("songs");
@@ -60,16 +71,9 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                 playlistName.setText(name);
                 playlistDescription.setText(description);
 
-                // Tải danh sách bài hát từ songIds
-                if (songIds != null) {
-                    loadSongs(songIds);
-                } else {
-                    Toast.makeText(this, "Không có bài hát trong Playlist", Toast.LENGTH_SHORT).show();
-                }
+                loadSongs(songIds);
             }
-        }).addOnFailureListener(e ->
-                Toast.makeText(this, "Không thể tải chi tiết Playlist", Toast.LENGTH_SHORT).show()
-        );
+        });
     }
 
     private void loadSongs(List<String> songIds) {

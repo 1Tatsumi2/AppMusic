@@ -2,7 +2,6 @@ package com.example.musicapp.Activities;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.musicapp.Fragments.HomeFragment;
 import com.example.musicapp.Fragments.LibraryFragment;
-import com.example.musicapp.Fragments.NotificationFragment;
+import com.example.musicapp.Fragments.SettingFragment;
 import com.example.musicapp.Fragments.SearchFragment;
 import com.example.musicapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new HomeFragment();
                 } else if (itemId == R.id.navSearch) {
                     selectedFragment = new SearchFragment();
-                } else if (itemId == R.id.navNotification) {
-                    selectedFragment = new NotificationFragment();
+                } else if (itemId == R.id.navSetting) {
+                    selectedFragment = new SettingFragment();
                 } else if (itemId == R.id.navLibrary) {
                     selectedFragment = new LibraryFragment();
                 }

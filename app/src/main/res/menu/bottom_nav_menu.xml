@@ -16,11 +16,11 @@
         android:title="Search" />
 
     <item
-        android:id="@+id/navNotification"
+        android:id="@+id/navSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/notification"
-        android:title="Notification" />
+        android:icon="@drawable/setting"
+        android:title="Setting" />
 
     <item
         android:id="@+id/navLibrary"

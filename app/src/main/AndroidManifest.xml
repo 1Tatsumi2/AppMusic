@@ -17,6 +17,12 @@
         android:theme="@style/Theme.MusicApp"
         tools:targetApi="31">
         <activity
+            android:name=".SettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Playlist.AddSongToPlaylistAdapter"
+            android:exported="false" />
+        <activity
             android:name=".Playlist.AddSongToPlaylistActivity"
             android:exported="false" />
         <activity
